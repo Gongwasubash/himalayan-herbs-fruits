@@ -1,0 +1,8 @@
+
+{
+  "name": "Himalayan Herbs & Fruits",
+  "description": "An authentic e-commerce store offering organic Nepali fruits and traditional Himalayan herbs (Jadibuti).",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
