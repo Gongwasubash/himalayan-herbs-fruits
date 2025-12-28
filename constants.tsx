@@ -21,7 +21,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     description: 'Organic apples from Jumla, sweet and crisp.',
     benefits: 'High in fiber and antioxidants.',
-    image: 'https://nepalorganicghar.com/2025/08/17/jumla-apple/turn0image9.jpg'
+    image: 'https://hips.hearstapps.com/hmg-prod/images/apples-at-farmers-market-royalty-free-image-1627321463.jpg?crop=1.00xw:0.631xh;0.00160xw,0.206xh&resize=1400:*'
   },
   {
     id: 'f2',
