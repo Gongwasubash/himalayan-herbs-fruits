@@ -1,118 +1,67 @@
-
 import { Product, Category, Testimonial } from './types';
 
 export const PRODUCTS: Product[] = [
-  // HERBS
+  // HERBS / JADIBUTI
   {
     id: 'h1',
     name: 'Timur (Sichuan Pepper)',
     nepaliName: 'टिमुर',
     category: Category.HERBS,
     price: 450,
-    description: 'High-altitude Sichuan pepper with intense citrus aroma and numbing sensation.',
-    benefits: 'Aids digestion, relieves pain, and boosts immunity.',
-    image: 'https://picsum.photos/seed/timur/600/400'
+    description: 'Nepali Timur spice with citrus aroma - used in achar and curries.',
+    benefits: 'Enhances flavor, supports digestion.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Sichuan_pepper.jpg'
   },
-  {
-    id: 'h2',
-    name: 'Sugandhawal (Siltimur)',
-    nepaliName: 'सुगन्धवाल',
-    category: Category.HERBS,
-    price: 550,
-    description: 'Aromatic herb found in temperate Himalayas, known for its distinct earthy fragrance.',
-    benefits: 'Used in treating nerve disorders and digestive issues.',
-    image: 'https://picsum.photos/seed/sugandhawal/600/400'
-  },
-  {
-    id: 'h3',
-    name: 'Kurilo Roots',
-    nepaliName: 'कुरिलोको जरा',
-    category: Category.HERBS,
-    price: 800,
-    description: 'Wild asparagus roots harvested from deep Himalayan forests.',
-    benefits: 'Rich in antioxidants and supports overall vitality.',
-    image: 'https://picsum.photos/seed/kurilo/600/400'
-  },
-  {
-    id: 'h4',
-    name: 'Padamchal',
-    nepaliName: 'पदमचाल',
-    category: Category.HERBS,
-    price: 600,
-    description: 'Himalayan Rhubarb root, naturally dried and processed.',
-    benefits: 'Effective for stomach ailments and blood purification.',
-    image: 'https://picsum.photos/seed/padamchal/600/400'
-  },
-  {
-    id: 'h5',
-    name: 'Jatamasi',
-    nepaliName: 'जटामसी',
-    category: Category.HERBS,
-    price: 1200,
-    description: 'Spikenard root, highly valued for its calming and aromatic properties.',
-    benefits: 'Promotes sleep, reduces anxiety, and supports hair health.',
-    image: 'https://picsum.photos/seed/jatamasi/600/400'
-  },
-  {
-    id: 'h6',
-    name: 'Titepati Tea',
-    nepaliName: 'तितेपाती चिया',
-    category: Category.HERBS,
-    price: 350,
-    description: 'Traditional Mugwort tea, sun-dried and hand-picked.',
-    benefits: 'Anti-inflammatory and excellent for digestive health.',
-    image: 'https://picsum.photos/seed/titepati/600/400'
-  },
-  // FRUITS
+  // LOCAL NEPALI FRUITS
   {
     id: 'f1',
     name: 'Jumla Apple (Organic)',
     nepaliName: 'जुम्लाको स्याउ',
     category: Category.FRUITS,
-    price: 250,
-    description: 'Sweet and crunchy apples grown in the organic orchards of Jumla.',
-    benefits: 'High fiber, vitamins, and minerals. 100% Organic.',
-    image: 'https://picsum.photos/seed/apple/600/400'
+    price: 300,
+    description: 'Organic apples from Jumla, sweet and crisp.',
+    benefits: 'High in fiber and antioxidants.',
+    image: 'https://nepalorganicghar.com/2025/08/17/jumla-apple/turn0image9.jpg'
   },
   {
     id: 'f2',
     name: 'Dhankuta Orange',
     nepaliName: 'धनकुटाको सुन्तला',
     category: Category.FRUITS,
-    price: 180,
-    description: 'Famous juicy oranges from the hills of Dhankuta.',
-    benefits: 'Loaded with Vitamin C and natural energy.',
-    image: 'https://picsum.photos/seed/orange/600/400'
+    price: 220,
+    description: 'Juicy and vitamin-rich orange.',
+    benefits: 'Excellent source of Vitamin C.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/c/c4/Orange-Fruit-Pieces.jpg'
   },
   {
     id: 'f3',
-    name: 'Mustang Chuli Apple',
-    nepaliName: 'मुस्ताङको स्याउ',
-    category: Category.FRUITS,
-    price: 280,
-    description: 'Premium quality apples from the dry high-altitude landscape of Mustang.',
-    benefits: 'Distinct flavor profile and long shelf life.',
-    image: 'https://picsum.photos/seed/mustang/600/400'
-  },
-  {
-    id: 'f4',
     name: 'Sankhuwasabha Kiwi',
     nepaliName: 'सङ्खुवासभाको किवी',
     category: Category.FRUITS,
-    price: 400,
-    description: 'Luscious, tangy kiwis grown in the eastern hills of Nepal.',
-    benefits: 'High in Vitamin E and antioxidants.',
-    image: 'https://picsum.photos/seed/kiwi/600/400'
+    price: 500,
+    description: 'Fresh kiwi fruit rich in nutrients.',
+    benefits: 'Boosts immunity and skin health.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Kiwi_aka.jpg'
+  },
+  {
+    id: 'f4',
+    name: 'Syangja Banana',
+    nepaliName: 'स्याङ्जाको केरा',
+    category: Category.FRUITS,
+    price: 180,
+    description: 'Fresh bananas from Syangja, sweet and energy-rich.',
+    benefits: 'Great source of potassium and natural energy.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/8/8a/Banana-Single.jpg'
   },
   {
     id: 'f5',
     name: 'Rajapur Mango',
     nepaliName: 'राजापुरको आँप',
     category: Category.FRUITS,
-    price: 220,
-    description: 'Tropical mangoes from the fertile plains of Rajapur, Bardiya.',
-    benefits: 'Rich in Vitamin A and tropical sweetness.',
-    image: 'https://picsum.photos/seed/mango/600/400'
+    price: 400,
+    description: 'Rich and juicy mango.',
+    benefits: 'Supports eyesight and digestion.',
+    image: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Hapus_Mango.jpg'
   }
 ];
 
@@ -126,7 +75,7 @@ export const TESTIMONIALS: Testimonial[] = [
   {
     id: 't2',
     name: 'Anjali Gurung',
-    text: 'ताजा जडीबुटी — मन पर्‍यो। टिमुरको बासना साच्चै कडा र उत्कृष्ट छ। प्याकेजिङ पनि राम्रो छ।',
+    text: 'ताजा जडीबुटी — मन पर्यो। टिमुरको बासना साच्चै कडा र उत्कृष्ट छ। प्याकेजिङ पनि राम्रो छ।',
     location: 'Pokhara, Nepal'
   },
   {

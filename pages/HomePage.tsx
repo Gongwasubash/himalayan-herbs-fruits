@@ -32,7 +32,7 @@ const HomePage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <Link to="/products?category=Jadibuti" className="group relative h-80 rounded-3xl overflow-hidden shadow-xl">
-            <img src="https://picsum.photos/seed/herb-cat/800/600" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Herbs" />
+            <img src="https://himalayan-masters.com/wp-content/uploads/2025/05/Top-Medicinal-Plants-found-in-Nepal.webp" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Herbs" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
               <Leaf className="text-primary-green mb-4" size={40} />
               <h4 className="text-3xl font-bold text-white mb-2">Jadibuti / Herbs</h4>
@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
           </Link>
 
           <Link to="/products?category=Local Fruits" className="group relative h-80 rounded-3xl overflow-hidden shadow-xl">
-            <img src="https://picsum.photos/seed/fruit-cat/800/600" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fruits" />
+            <img src="https://hips.hearstapps.com/hmg-prod/images/apples-at-farmers-market-royalty-free-image-1627321463.jpg?crop=1.00xw:0.631xh;0.00160xw,0.206xh&resize=1400:*" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fruits" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
               <Apple className="text-primary-green mb-4" size={40} />
               <h4 className="text-3xl font-bold text-white mb-2">Local Fruits</h4>
