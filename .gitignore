@@ -4,3 +4,4 @@ backend/
 deploy/
 public/
 *.log
+.vercel
