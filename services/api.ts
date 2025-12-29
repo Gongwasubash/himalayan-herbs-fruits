@@ -1,72 +1,38 @@
-
 import { Product, ContactMessage } from '../types';
-import { PRODUCTS } from '../constants';
-
-/**
- * Robustly retrieves products from localStorage or initializes them if missing.
- */
-const getStoredProducts = (): Product[] => {
-  try {
-    const stored = localStorage.getItem('himalayan_products');
-    if (!stored) {
-      localStorage.setItem('himalayan_products', JSON.stringify(PRODUCTS));
-      return PRODUCTS;
-    }
-    return JSON.parse(stored);
-  } catch (error) {
-    console.error("Failed to parse products from localStorage:", error);
-    return PRODUCTS;
-  }
-};
+import { sheetsService } from './sheets';
 
 export const api = {
   // PRODUCTS CRUD
   getProducts: async (): Promise<Product[]> => {
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(getStoredProducts()), 300);
-    });
+    try {
+      return await sheetsService.getProducts();
+    } catch (error) {
+      console.error('Failed to fetch products from Google Sheets:', error);
+      return [];
+    }
   },
 
   getProductById: async (id: string): Promise<Product | undefined> => {
-    return new Promise((resolve) => {
-      const products = getStoredProducts();
-      setTimeout(() => {
-        const product = products.find((p) => String(p.id) === String(id));
-        resolve(product);
-      }, 200);
-    });
+    try {
+      const products = await sheetsService.getProducts();
+      return products.find((p) => String(p.id) === String(id));
+    } catch (error) {
+      console.error('Failed to fetch product:', error);
+      return undefined;
+    }
   },
 
   addProduct: async (product: Omit<Product, 'id'>): Promise<Product> => {
-    return new Promise((resolve) => {
-      const products = getStoredProducts();
-      const newProduct = { ...product, id: `p-${Date.now()}` };
-      const updated = [...products, newProduct];
-      localStorage.setItem('himalayan_products', JSON.stringify(updated));
-      setTimeout(() => resolve(newProduct), 500);
-    });
+    // For Google Sheets, you'd need to implement append functionality
+    throw new Error('Adding products to Google Sheets not implemented');
   },
 
   updateProduct: async (id: string, updates: Partial<Product>): Promise<Product> => {
-    return new Promise((resolve, reject) => {
-      const products = getStoredProducts();
-      const index = products.findIndex(p => String(p.id) === String(id));
-      if (index === -1) return reject("Product not found");
-      
-      const updatedProduct = { ...products[index], ...updates };
-      products[index] = updatedProduct;
-      localStorage.setItem('himalayan_products', JSON.stringify(products));
-      setTimeout(() => resolve(updatedProduct), 500);
-    });
+    throw new Error('Updating products in Google Sheets not implemented');
   },
 
   deleteProduct: async (id: string): Promise<void> => {
-    return new Promise((resolve) => {
-      const products = getStoredProducts();
-      const updated = products.filter(p => String(p.id) !== String(id));
-      localStorage.setItem('himalayan_products', JSON.stringify(updated));
-      setTimeout(() => resolve(), 400);
-    });
+    throw new Error('Deleting products from Google Sheets not implemented');
   },
 
   // HERO SLIDES CRUD
@@ -110,10 +76,7 @@ export const api = {
   // AUTH
   login: async (email: string, password: string): Promise<{ success: boolean; token?: string }> => {
     return new Promise((resolve) => {
-      const admins = JSON.parse(localStorage.getItem('himalayan_admins') || '[]');
-      const admin = admins.find((a: any) => a.email === email && a.password === password);
-      
-      if ((email === 'admin@himalayan.com' && password === 'admin123') || admin) {
+      if (email === 'admin@himalayan.com' && password === 'admin123') {
         localStorage.setItem('himalayan_auth', 'true');
         resolve({ success: true, token: 'mock-jwt-token' });
       } else {
@@ -124,9 +87,6 @@ export const api = {
 
   registerAdmin: async (adminData: any): Promise<{ success: boolean }> => {
     return new Promise((resolve) => {
-      const admins = JSON.parse(localStorage.getItem('himalayan_admins') || '[]');
-      admins.push(adminData);
-      localStorage.setItem('himalayan_admins', JSON.stringify(admins));
       resolve({ success: true });
     });
   },

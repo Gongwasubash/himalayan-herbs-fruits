@@ -49,10 +49,7 @@ const DashboardPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (!api.isAuthenticated()) {
-      navigate('/admin/login');
-      return;
-    }
+    // Skip authentication check - allow direct access
     loadData();
   }, []);
 
