@@ -1,21 +1,30 @@
 
 import React, { useState } from 'react';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { api } from '../services/api';
+import { sheetsService } from '../services/sheets';
 
 const ContactPage: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success'>('idle');
+  const [formData, setFormData] = useState({ name: '', email: '', address: '', message: '' });
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('submitting');
-    await api.submitContact({
-      ...formData,
-      timestamp: new Date().toISOString()
-    });
-    setStatus('success');
-    setFormData({ name: '', email: '', message: '' });
+    
+    try {
+      // Save to Google Sheets
+      const saved = await sheetsService.saveMessage(formData);
+      
+      if (saved) {
+        setStatus('success');
+        setFormData({ name: '', email: '', address: '', message: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Submit failed:', error);
+      setStatus('error');
+    }
   };
 
   return (
@@ -36,7 +45,7 @@ const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-text-dark">Our Location</h4>
-                  <p className="text-text-dark/60 italic">Boudha, Kathmandu, Nepal</p>
+                  <p className="text-text-dark/60 italic">Banglamukhi, Lalitpur, Nepal</p>
                 </div>
               </div>
               <div className="flex gap-6 items-start">
@@ -45,7 +54,7 @@ const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-text-dark">Call Us</h4>
-                  <p className="text-text-dark/60">+977-1-4XXXXXX</p>
+                  <p className="text-text-dark/60">9840564096</p>
                 </div>
               </div>
               <div className="flex gap-6 items-start">
@@ -54,7 +63,7 @@ const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-text-dark">Email Support</h4>
-                  <p className="text-text-dark/60">info@himalayanherbs.com</p>
+                  <p className="text-text-dark/60">subashgongwanepal@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -67,13 +76,24 @@ const ContactPage: React.FC = () => {
                 <div className="w-20 h-20 bg-primary-green/10 text-primary-green rounded-full flex items-center justify-center mb-6">
                   <CheckCircle2 size={48} />
                 </div>
-                <h3 className="text-2xl font-bold text-text-dark mb-4">Message Sent!</h3>
-                <p className="text-text-dark/60 mb-8">Thank you for reaching out. We will get back to you within 24-48 hours.</p>
+                <h3 className="text-2xl font-bold text-text-dark mb-4">Message Received!</h3>
+                <p className="text-text-dark/60 mb-8">Thank you for your message. We have received your inquiry and will get back to you soon.</p>
                 <button 
                   onClick={() => setStatus('idle')}
                   className="bg-primary-green text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-green/90"
                 >
                   Send another message
+                </button>
+              </div>
+            ) : status === 'error' ? (
+              <div className="h-full flex flex-col items-center justify-center text-center py-12">
+                <h3 className="text-2xl font-bold text-text-dark mb-4">Send Failed</h3>
+                <p className="text-text-dark/60 mb-8">Please check your Google Sheets API configuration or contact us directly at subashgongwanepal@gmail.com</p>
+                <button 
+                  onClick={() => setStatus('idle')}
+                  className="bg-primary-green text-white px-8 py-3 rounded-xl font-bold hover:bg-primary-green/90"
+                >
+                  Try again
                 </button>
               </div>
             ) : (
@@ -97,6 +117,17 @@ const ContactPage: React.FC = () => {
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                     placeholder="ram@example.com"
+                    className="w-full bg-neutral-bg/50 border border-primary-green/10 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary-green transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-text-dark/70 uppercase tracking-widest mb-2">Address</label>
+                  <input 
+                    required
+                    type="text" 
+                    value={formData.address}
+                    onChange={(e) => setFormData({...formData, address: e.target.value})}
+                    placeholder="Kathmandu, Nepal"
                     className="w-full bg-neutral-bg/50 border border-primary-green/10 rounded-2xl px-6 py-4 outline-none focus:ring-2 focus:ring-primary-green transition-all"
                   />
                 </div>

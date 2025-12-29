@@ -10,9 +10,6 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
-import UserLoginPage from './pages/UserLoginPage';
-import UserSignupPage from './pages/UserSignupPage';
-import AdminLoginPage from './pages/Admin/LoginPage';
 import AdminDashboardPage from './pages/Admin/DashboardPage';
 
 const App: React.FC = () => {
@@ -28,9 +25,6 @@ const App: React.FC = () => {
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/login" element={<UserLoginPage />} />
-          <Route path="/signup" element={<UserSignupPage />} />
-          <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
         </Routes>
       </Layout>

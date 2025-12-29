@@ -4,18 +4,21 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Leaf, Apple, Star } from 'lucide-react';
 import { Product, Category } from '../types';
 import { api } from '../services/api';
+import { sheetsService } from '../services/sheets';
 import { TESTIMONIALS } from '../constants';
 import { useCart } from '../store/cartStore';
 import HeroSlider from '../components/HeroSlider';
 
 const HomePage: React.FC = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [categoryImages, setCategoryImages] = useState<{ [key: string]: string }>({});
   const { addToCart } = useCart();
 
   useEffect(() => {
     api.getProducts().then(products => {
       setFeaturedProducts(products.slice(0, 4));
     });
+    sheetsService.getCategoryImages().then(setCategoryImages);
   }, []);
 
   return (
@@ -30,24 +33,28 @@ const HomePage: React.FC = () => {
           <div className="w-20 h-1 bg-primary-green mx-auto"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <Link to="/products?category=Jadibuti" className="group relative h-80 rounded-3xl overflow-hidden shadow-xl">
-            <img src="https://himalayan-masters.com/wp-content/uploads/2025/05/Top-Medicinal-Plants-found-in-Nepal.webp" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Herbs" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
-              <Leaf className="text-primary-green mb-4" size={40} />
-              <h4 className="text-3xl font-bold text-white mb-2">Jadibuti / Herbs</h4>
-              <p className="text-white/80">Traditional medicinal herbs from the high Himalayas.</p>
-            </div>
-          </Link>
-
-          <Link to="/products?category=Local Fruits" className="group relative h-80 rounded-3xl overflow-hidden shadow-xl">
-            <img src="https://hips.hearstapps.com/hmg-prod/images/apples-at-farmers-market-royalty-free-image-1627321463.jpg?crop=1.00xw:0.631xh;0.00160xw,0.206xh&resize=1400:*" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Fruits" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8">
-              <Apple className="text-primary-green mb-4" size={40} />
-              <h4 className="text-3xl font-bold text-white mb-2">Local Fruits</h4>
-              <p className="text-white/80">Sweet, sun-ripened organic fruits from Nepal's hills.</p>
-            </div>
-          </Link>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {Object.values(Category).map((category) => {
+            const categoryImage = categoryImages[category] || 'https://images.unsplash.com/photo-1490818387583-1baba5e638af?w=400';
+            
+            return (
+              <Link 
+                key={category} 
+                to={`/products?category=${encodeURIComponent(category)}`} 
+                className="group relative h-32 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+              >
+                <img 
+                  src={categoryImage} 
+                  alt={category}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-4">
+                  <h4 className="font-bold text-white text-sm mb-1">{category}</h4>
+                  <p className="text-white/80 text-xs">Explore products</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

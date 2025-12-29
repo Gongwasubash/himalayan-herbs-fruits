@@ -1,7 +1,17 @@
 
 export enum Category {
-  HERBS = 'Jadibuti',
-  FRUITS = 'Local Fruits'
+  SUPERFOOD = 'Superfood',
+  FLOUR_MILLETS = 'Flour & Millets',
+  HONEY = 'Honey',
+  FRUITS = 'Fruits',
+  LOCAL_RICE = 'Local Rice',
+  LENTILS_BEANS = 'Lentils/Beans',
+  LENTILS = 'Lentils',
+  GRAINS = 'Grains',
+  FLOUR = 'Flour',
+  HERB = 'Herb',
+  SPICE = 'Spice',
+  MEAT = 'Meat'
 }
 
 export interface Product {

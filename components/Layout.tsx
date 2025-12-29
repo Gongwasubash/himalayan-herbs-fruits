@@ -1,52 +1,9 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingCart, Menu, X, Leaf, Instagram, Facebook, Twitter, Shield, User, LogOut } from 'lucide-react';
+import { ShoppingCart, Menu, X, Leaf, Instagram, Facebook, Twitter, Shield } from 'lucide-react';
 import { useCart } from '../store/cartStore';
 import VoiceAssistant from './VoiceAssistant';
-
-const UserAuthButtons: React.FC = () => {
-  const isLoggedIn = localStorage.getItem('user_token');
-  const userName = localStorage.getItem('user_name');
-
-  const handleLogout = () => {
-    localStorage.removeItem('user_token');
-    localStorage.removeItem('user_email');
-    localStorage.removeItem('user_name');
-    window.location.reload();
-  };
-
-  if (isLoggedIn) {
-    return (
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-earth-brown">Hi, {userName || 'User'}</span>
-        <button
-          onClick={handleLogout}
-          className="flex items-center gap-1 text-sm font-medium text-text-dark hover:text-primary-green transition-colors"
-        >
-          <LogOut size={16} /> Logout
-        </button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="flex items-center gap-4">
-      <Link
-        to="/login"
-        className="text-sm font-medium text-text-dark hover:text-primary-green transition-colors"
-      >
-        Login
-      </Link>
-      <Link
-        to="/signup"
-        className="bg-primary-green text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-primary-green/90 transition-colors"
-      >
-        Sign Up
-      </Link>
-    </div>
-  );
-};
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -96,7 +53,6 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                   {link.label}
                 </Link>
               ))}
-              <UserAuthButtons />
               <Link to="/cart" className="relative p-2 text-text-dark hover:text-primary-green transition-colors">
                 <ShoppingCart size={24} />
                 {totalItems > 0 && (
@@ -184,7 +140,7 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                 <a href="#" className="p-2 bg-accent-cream/10 rounded-full hover:bg-primary-green transition-colors"><Facebook size={20} /></a>
                 <a href="#" className="p-2 bg-accent-cream/10 rounded-full hover:bg-primary-green transition-colors"><Twitter size={20} /></a>
               </div>
-              <Link to="/admin/login" className="flex items-center gap-2 text-primary-green/60 hover:text-primary-green transition-colors text-sm font-medium">
+              <Link to="/admin/dashboard" className="flex items-center gap-2 text-primary-green/60 hover:text-primary-green transition-colors text-sm font-medium">
                 <Shield size={16} /> Admin Portal
               </Link>
             </div>
