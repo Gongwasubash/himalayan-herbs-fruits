@@ -24,7 +24,27 @@ const CheckoutPage: React.FC = () => {
     email: ''
   });
 
-  // Redirect to cart if no items
+  // Check if we just completed an order (success state)
+  if (isSuccess) {
+    return (
+      <div className="bg-neutral-bg min-h-screen py-24 flex items-center justify-center px-4">
+        <div className="text-center bg-white p-12 lg:p-20 rounded-[4rem] shadow-2xl max-w-2xl w-full animate-in zoom-in-95 duration-500">
+          <div className="w-24 h-24 bg-primary-green/10 text-primary-green rounded-full flex items-center justify-center mx-auto mb-8">
+            <CheckCircle2 size={64} />
+          </div>
+          <h1 className="text-4xl font-extrabold text-text-dark mb-6 tracking-tight">Order Placed Successfully!</h1>
+          <p className="text-xl text-text-dark/60 mb-12 leading-relaxed">
+            Thank you for choosing <span className="text-primary-green font-bold">Himalayan Herbs & Fruits</span>. Your order is being processed and will be delivered shortly.
+          </p>
+          <Link to="/products" className="inline-block bg-primary-green text-white px-12 py-5 rounded-full font-bold text-xl hover:bg-primary-green/90 shadow-xl shadow-primary-green/20 transition-all">
+            Continue Shopping
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect to cart if no items (but not if we just completed an order)
   if (!cart || cart.length === 0) {
     return (
       <div className="bg-neutral-bg min-h-screen py-24 flex items-center justify-center px-4">
