@@ -40,7 +40,7 @@ const AboutPage: React.FC = () => {
           <div className="relative">
             <div className="absolute -inset-4 bg-primary-green/10 rounded-[4rem] rotate-3"></div>
             <img 
-              src="https://images.unsplash.com/photo-1595181048473-199468e8267d?auto=format&fit=crop&q=80&w=1200" 
+              src="https://cdn.prod.website-files.com/5f1618726b3fb3f4cbb10bd2/6249f9760013f780a12a614d_vision%20mission-p-1080.jpeg" 
               className="relative w-full h-[500px] object-cover rounded-[3rem] shadow-2xl"
               alt="Farmers working"
             />

@@ -54,7 +54,34 @@ const ContactPage: React.FC = () => {
                 </div>
                 <div>
                   <h4 className="text-lg font-bold text-text-dark">Call Us</h4>
-                  <p className="text-text-dark/60">9840564096</p>
+                  <p className="text-text-dark/60">📞 9840564096</p>
+                  <p className="text-text-dark/60">📞 986-6556633</p>
+                </div>
+              </div>
+              <div className="flex gap-6 items-start">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-primary-green shadow-sm shrink-0">
+                  <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" className="w-7 h-7" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-text-dark">WhatsApp</h4>
+                  <a 
+                    href="https://wa.me/9779840564096" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary-green hover:text-primary-green/80 font-medium flex items-center gap-2 mb-2"
+                  >
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" className="w-4 h-4" />
+                    9840564096
+                  </a>
+                  <a 
+                    href="https://wa.me/97798665566633" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-primary-green hover:text-primary-green/80 font-medium flex items-center gap-2"
+                  >
+                    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" className="w-4 h-4" />
+                    986-6556633
+                  </a>
                 </div>
               </div>
               <div className="flex gap-6 items-start">

@@ -74,26 +74,101 @@ export const sheetsService = {
     }
   },
 
-  async saveMessage(messageData: { name: string; email: string; address: string; message: string }) {
+  async saveOrder(orderData: { name: string; phone: string; address: string; email: string; products: string; totalAmount: number; orderDate: string; status: string }) {
     try {
-      // Google Apps Script Web App URL (you'll need to create this)
-      const SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+      // Use form submission method to bypass CORS
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://script.google.com/macros/s/AKfycbzm0SPJyJMrNc7CO3795qFC1NXHQ-XnTkFpm6l38UMbJngADLnKUFP9xpbi0aF_rgzZkA/exec';
       
-      const response = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: messageData.name,
-          email: messageData.email,
-          address: messageData.address,
-          message: messageData.message,
-          timestamp: new Date().toISOString()
-        })
+      // Create hidden iframe to submit form without opening new page
+      const iframe = document.createElement('iframe');
+      iframe.name = 'hidden_iframe_order';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      
+      form.target = 'hidden_iframe_order';
+      form.style.display = 'none';
+      
+      // Add form fields
+      const fields = {
+        name: orderData.name,
+        phone: orderData.phone,
+        address: orderData.address,
+        email: orderData.email,
+        products: orderData.products,
+        totalAmount: orderData.totalAmount.toString(),
+        orderDate: orderData.orderDate,
+        status: orderData.status
+      };
+      
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
       });
       
-      return response.ok;
+      document.body.appendChild(form);
+      form.submit();
+      
+      // Clean up after a short delay
+      setTimeout(() => {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+      }, 1000);
+      
+      return true;
+    } catch (error) {
+      console.error('Failed to save order:', error);
+      return false;
+    }
+  },
+
+  async saveMessage(messageData: { name: string; email: string; address: string; message: string }) {
+    try {
+      // Use form submission method to bypass CORS - SEPARATE SCRIPT FOR MESSAGES
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = 'https://script.google.com/macros/s/AKfycbwIY1IeBqKWWSmxb6WttxbB7CblAuh8Zv-BKYJRa8IAcYlbO6fzkLf5nofXrkwjX4fWRA/exec';
+      
+      // Create hidden iframe to submit form without opening new page
+      const iframe = document.createElement('iframe');
+      iframe.name = 'hidden_iframe';
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      
+      form.target = 'hidden_iframe';
+      form.style.display = 'none';
+      
+      // Add form fields
+      const fields = {
+        name: messageData.name,
+        email: messageData.email,
+        address: messageData.address,
+        message: messageData.message,
+        date: new Date().toISOString()
+      };
+      
+      Object.entries(fields).forEach(([key, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+      
+      document.body.appendChild(form);
+      form.submit();
+      
+      // Clean up after a short delay
+      setTimeout(() => {
+        document.body.removeChild(form);
+        document.body.removeChild(iframe);
+      }, 1000);
+      
+      return true;
     } catch (error) {
       console.error('Failed to save message:', error);
       return false;

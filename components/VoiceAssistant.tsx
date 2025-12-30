@@ -65,17 +65,27 @@ const VoiceAssistant: React.FC = () => {
   const activeSession = useRef<any>(null);
 
   const stopAssistant = () => {
+    console.log('Stopping assistant...');
     activeSession.current = null;
+    
+    // Stop microphone stream
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach(track => {
+        track.stop();
+        console.log('Microphone track stopped');
+      });
       streamRef.current = null;
     }
+    
+    // Stop all audio sources
     sources.current.forEach(source => {
       try { source.stop(); } catch (e) {}
     });
     sources.current.clear();
+    
     setIsActive(false);
     setIsConnecting(false);
+    setIsSpeaking(false);
     nextStartTime.current = 0;
   };
 
@@ -112,7 +122,15 @@ const VoiceAssistant: React.FC = () => {
     setIsConnecting(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+      // Check API key
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      console.log('API Key available:', !!apiKey);
+      
+      if (!apiKey) {
+        throw new Error('API key not found');
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
       const products = await api.getProducts();
 
       // Setup Audio Contexts
@@ -126,11 +144,14 @@ const VoiceAssistant: React.FC = () => {
       await audioContexts.current.input.resume();
       await audioContexts.current.output.resume();
 
+      console.log('Requesting microphone access...');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       streamRef.current = stream;
+      console.log('Microphone access granted');
 
+      console.log('Connecting to Gemini Live API...');
       const sessionPromise = ai.live.connect({
-        model: 'gemini-2.5-flash-native-audio-preview-09-2025',
+        model: 'gemini-2.0-flash-exp',
         config: {
           responseModalities: [Modality.AUDIO],
           tools: [{ functionDeclarations: toolDeclarations }],
@@ -156,6 +177,7 @@ const VoiceAssistant: React.FC = () => {
         },
         callbacks: {
           onopen: () => {
+            console.log('Gemini Live session opened successfully');
             setIsConnecting(false);
             setIsActive(true);
             
@@ -163,6 +185,9 @@ const VoiceAssistant: React.FC = () => {
             const scriptProcessor = audioContexts.current.input!.createScriptProcessor(4096, 1, 1);
             
             scriptProcessor.onaudioprocess = (e) => {
+              // Check if session is still active
+              if (!activeSession.current) return;
+              
               const inputData = e.inputBuffer.getChannelData(0);
               const l = inputData.length;
               const int16 = new Int16Array(l);
@@ -174,12 +199,22 @@ const VoiceAssistant: React.FC = () => {
                 mimeType: 'audio/pcm;rate=16000',
               };
               
-              // CRITICAL: Solely rely on sessionPromise resolves
-              sessionPromise.then((session) => {
-                session.sendRealtimeInput({ media: pcmBlob });
-              }).catch(() => {
-                // Ignore if session failed
-              });
+              // Only send if session is active
+              if (activeSession.current) {
+                sessionPromise.then((session) => {
+                  if (session && activeSession.current) {
+                    try {
+                      session.sendRealtimeInput({ media: pcmBlob });
+                    } catch (error) {
+                      console.log('Session closed, stopping audio processing');
+                      activeSession.current = null;
+                    }
+                  }
+                }).catch(() => {
+                  // Session failed, stop processing
+                  activeSession.current = null;
+                });
+              }
             };
 
             source.connect(scriptProcessor);
@@ -259,10 +294,20 @@ const VoiceAssistant: React.FC = () => {
           },
           onerror: (e) => {
             console.error("Live API Error:", e);
-            setError("Network error. Please try again.");
+            setError("Connection lost. Please try again.");
             stopAssistant();
           },
-          onclose: () => {
+          onclose: (e) => {
+            console.log("Live API connection closed:", e.code, e.reason);
+            if (e.code === 1011) {
+              setError("💳 API quota exceeded. Please check your Google AI Studio billing or wait for quota reset.");
+            } else if (e.code === 1006) {
+              setError("🔄 Connection lost unexpectedly. Please try again.");
+            } else if (e.code === 1000) {
+              console.log("Normal connection close");
+            } else {
+              setError(`❌ Connection error (${e.code}): ${e.reason || 'Unknown error'}`);
+            }
             stopAssistant();
           }
         }
@@ -271,7 +316,19 @@ const VoiceAssistant: React.FC = () => {
       activeSession.current = await sessionPromise;
     } catch (err) {
       console.error("Assistant Start Error:", err);
-      setError("Connection failed. Check your microphone or network.");
+      if (err instanceof Error) {
+        if (err.message.includes('API key')) {
+          setError("❌ API key issue. Check your environment variables.");
+        } else if (err.name === 'NotAllowedError') {
+          setError("🎤 Microphone access denied. Please allow microphone permission.");
+        } else if (err.name === 'NotFoundError') {
+          setError("🎤 No microphone found. Please check your device.");
+        } else {
+          setError(`❌ Error: ${err.message}`);
+        }
+      } else {
+        setError("❌ Connection failed. Check your network.");
+      }
       setIsConnecting(false);
     }
   };
